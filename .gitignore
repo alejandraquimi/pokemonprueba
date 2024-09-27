@@ -1,0 +1,12 @@
+__pycache__
+/node_modules
+Server
+build
+.vscode
+*/__pycache__/
+.env
+logs
+images/
+venv/
+alembic/
+.venv/
