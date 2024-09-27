@@ -12,14 +12,12 @@ class PokemonScreen extends GetView<PokemonController> {
         title: Text('Detalles del Pokémon'),
       ),
       body: Obx(() {
-        // Comprobar si `pokemonSelected` es null
         if (controller.pokemonSelected.value == null) {
           return const Center(
             child: Text('No se recibió el Pokémon.'),
           );
         }
 
-        // Si `pokemonSelected` no es null, mostrar la información del Pokémon
         return Center(
           child: Card(
             elevation: 4,
@@ -56,7 +54,6 @@ class PokemonScreen extends GetView<PokemonController> {
                     style: const TextStyle(fontSize: 16),
                   ),
                   const SizedBox(height: 16),
-                  // Botón de Evolucionar
                   Center(
                     child: ElevatedButton(
                       onPressed: () async {
@@ -66,7 +63,6 @@ class PokemonScreen extends GetView<PokemonController> {
                     ),
                   ),
                   const SizedBox(height: 16),
-                  // Botón de Guardar
                   Center(
                     child: ElevatedButton(
                       onPressed: () async {

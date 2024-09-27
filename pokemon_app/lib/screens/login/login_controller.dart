@@ -1,7 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
-import 'package:jwt_decoder/jwt_decoder.dart'; // Importar jwt_decoder
+import 'package:jwt_decoder/jwt_decoder.dart';
 
 class LoginController extends GetxController {
   final Dio _dio = Dio();
@@ -11,7 +11,7 @@ class LoginController extends GetxController {
   RxString userId = ''.obs;
   RxString username = ''.obs;
 
-  final String loginUrl = "http://192.168.1.221:5000/user/login";
+  final String loginUrl = "http://192.168.0.129:5000/user/login";
   Future<bool> login(String username, String password) async {
     try {
       final response = await _dio.post(

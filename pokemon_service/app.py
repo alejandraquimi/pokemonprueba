@@ -14,12 +14,9 @@ app.config.from_object(Config)
 
 db.init_app(app)
 
-# Configurar Flask-Migrate
-migrate = Migrate(app, db)  # Inicializar Flask-Migrate
+migrate = Migrate(app, db)
 
-swagger = Swagger(app)
 jwt = JWTManager(app)
-# Registrar los Blueprints
 app.register_blueprint(user_bp, url_prefix="/user")
 app.register_blueprint(pokemon_bp, url_prefix="/pokemon")
 

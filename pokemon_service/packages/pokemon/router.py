@@ -1,7 +1,12 @@
 from flask import Blueprint, request, jsonify
 from models import Pokemons, Usuario, db
 from flask_jwt_extended import jwt_required, get_jwt_identity
+
+from utils.responses import InternalServerErrorResponse, SuccessResponse
+
+from .exceptions import UserNotFoundException, PokemonFound
 from .schemas import PokemonAdd
+from utils.output import output_ERROR
 
 pokemon_bp = Blueprint("pokemon_bp", __name__)
 
@@ -13,7 +18,7 @@ def get_pokemons():
     user = Usuario.query.get(user_id)
 
     if not user:
-        return jsonify({"message": "Usuario no encontrado"}), 404
+        raise UserNotFoundException("get_pokemons")
 
     pokemons = [
         {"id": pokemon.id, "name": pokemon.name, "url": pokemon.url}
@@ -38,12 +43,20 @@ def add_pokemon():
 
     if not pokemon:
         try:
+            # Crear un nuevo Pokémon
             pokemon = Pokemons(name=pokemon_name, url=pokemon_url, id=pokemon_id)
             db.session.add(pokemon)
             db.session.commit()
-        except Exception as e:
+        except SQLAlchemyError as e:
             db.session.rollback()
-            return jsonify({"message": f"Error al crear el Pokemon: {str(e)}"}), 500
+            output_ERROR(e, "authenticate_user")
+            error_response = InternalServerErrorResponse(
+                message=str(e), func="get_single_access"
+            )
+            return (
+                jsonify(error_response.model_dump()),
+                500,
+            )
 
     user = Usuario.query.get(user_id)
     if not user:
@@ -51,10 +64,24 @@ def add_pokemon():
 
     if pokemon in user.pokemons:
         return jsonify({"message": "Este Pokemon ya está en la lista del usuario"}), 400
+
     user.pokemons.append(pokemon)
     try:
         db.session.commit()
-        return jsonify({"message": "Pokemon agregado exitosamente"}), 200
+        success_response = SuccessResponse(
+            message="Pokemon agregado exitosamente", func="add_pokemon"
+        )
+        return (
+            jsonify(success_response.model_dump()),
+            200,
+        )
     except Exception as e:
         db.session.rollback()
-        return jsonify({"message": f"Error al agregar el Pokemon: {str(e)}"}), 500
+        output_ERROR(e, "authenticate_user")
+        error_response = InternalServerErrorResponse(
+            message=str(e), func="get_single_access"
+        )
+        return (
+            jsonify(error_response.model_dump()),
+            500,
+        )

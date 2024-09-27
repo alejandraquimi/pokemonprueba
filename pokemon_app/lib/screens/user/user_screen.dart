@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'user_controller.dart'; // Importar el controlador
+import 'user_controller.dart';
 
 class UserScreen extends GetView<UserController> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
@@ -15,25 +15,19 @@ class UserScreen extends GetView<UserController> {
           key: _formKey,
           child: Column(
             children: [
-              // Campo de entrada de Usuario
               TextFormField(
-                controller:
-                    controller.usernameController, // Usar TextEditingController
+                controller: controller.usernameController,
                 decoration: InputDecoration(labelText: 'Usuario'),
                 validator: (value) {
                   return controller.validateUsername(value!);
                 },
                 onChanged: (value) {
-                  controller.username.value =
-                      value; // Actualiza el valor en el controlador
+                  controller.username.value = value;
                 },
               ),
               SizedBox(height: 20),
-
-              // Campo de entrada de Contraseña con "ojito"
               Obx(() => TextFormField(
-                    controller: controller
-                        .passwordController, // Usar TextEditingController
+                    controller: controller.passwordController,
                     decoration: InputDecoration(
                       labelText: 'Contraseña',
                       suffixIcon: IconButton(
@@ -56,8 +50,6 @@ class UserScreen extends GetView<UserController> {
                     },
                   )),
               SizedBox(height: 20),
-
-              // Botón para crear el usuario
               ElevatedButton(
                 onPressed: () async {
                   if (_formKey.currentState?.validate() ?? false) {

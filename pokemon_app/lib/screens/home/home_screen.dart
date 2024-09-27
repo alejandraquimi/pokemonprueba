@@ -16,7 +16,6 @@ class HomeScreen extends GetView<HomeController> {
         }),
         actions: [
           Obx(() {
-            // Mostrar un indicador de carga en el icono de favoritos si está cargando
             return controller.isLoading.value
                 ? CircularProgressIndicator(
                     color: Colors.white,
@@ -39,10 +38,9 @@ class HomeScreen extends GetView<HomeController> {
             : controller.pokemons;
 
         if (currentList.isEmpty) {
-          return const Center(child: Text("No hay pokémons en esta lista"));
+          return const Center(child: CircularProgressIndicator());
         }
 
-        // Mostrar la lista de pokémons
         return ListView.builder(
           itemCount: currentList.length,
           itemBuilder: (context, index) {

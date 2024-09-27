@@ -39,15 +39,11 @@ class PokemonController extends GetxController {
   void processEvolutionChain(Map<String, dynamic> evolutionData) {
     evolutionChain.clear();
     var chain = evolutionData['chain'];
-
     evolutionChain.add(chain['species']['name']);
-
     while (chain['evolves_to'].isNotEmpty) {
       chain = chain['evolves_to'][0];
       evolutionChain.add(chain['species']['name']);
     }
-
-    print('Cadena evolutiva: $evolutionChain');
   }
 
   String? getNextEvolution() {
@@ -62,8 +58,6 @@ class PokemonController extends GetxController {
   Future<void> evolucionarPokemon() async {
     final nextEvolution = getNextEvolution();
     if (nextEvolution != null) {
-      pokemonSelected.value =
-          pokemonSelected.value?.copyWith(name: nextEvolution);
       final pokemonProvider = Get.find<PokemonProvider>();
       pokemonSelected.value =
           await pokemonProvider.getSinglePokemon(nextEvolution);

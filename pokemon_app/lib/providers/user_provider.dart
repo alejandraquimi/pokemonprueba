@@ -10,7 +10,7 @@ import 'package:pokemon_app/screens/login/login_controller.dart';
 class UserProvider {
   final logger = Logger();
   Dio dio = Dio();
-  final String url = "http://192.168.1.221:5000";
+  final String url = "http://192.168.0.129:5000";
 
   Future<void> createUser(body) async {
     try {
@@ -59,7 +59,17 @@ class UserProvider {
         return false;
       }
     } catch (e) {
-      Get.snackbar("Error", "Hubo un problema al agregar el pokemon");
+      if (e is DioException) {
+        String? errorMessage = e.response?.data != null
+            ? e.response?.data['message'] ?? "Error"
+            : e.message;
+        Get.snackbar(
+          "Error",
+          "${errorMessage}",
+        );
+      } else {
+        Get.snackbar("Error", "Error desconocido: ${e.toString()}");
+      }
       return false;
     }
   }
